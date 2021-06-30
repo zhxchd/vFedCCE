@@ -1,0 +1,30 @@
+\begin{thebibliography}{3}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Groemping(2019)]{groemping2019south}
+U.~Groemping.
+\newblock South german credit data: Correcting a widely used data set.
+\newblock \emph{Rep. Math., Phys. Chem., Berlin, Germany, Tech. Rep},
+  4:\penalty0 2019, 2019.
+
+\bibitem[Hardy et~al.(2017)Hardy, Henecka, Ivey-Law, Nock, Patrini, Smith, and
+  Thorne]{hardy2017private}
+S.~Hardy, W.~Henecka, H.~Ivey-Law, R.~Nock, G.~Patrini, G.~Smith, and
+  B.~Thorne.
+\newblock Private federated learning on vertically partitioned data via entity
+  resolution and additively homomorphic encryption.
+\newblock \emph{arXiv preprint arXiv:1711.10677}, 2017.
+
+\bibitem[Yang et~al.(2019)Yang, Liu, Chen, and Tong]{yang2019federated}
+Q.~Yang, Y.~Liu, T.~Chen, and Y.~Tong.
+\newblock Federated machine learning.
+\newblock \emph{{ACM} Transactions on Intelligent Systems and Technology},
+  10\penalty0 (2):\penalty0 1--19, Feb. 2019.
+\newblock \doi{10.1145/3298981}.
+\newblock URL \url{https://doi.org/10.1145/3298981}.
+
+\end{thebibliography}
