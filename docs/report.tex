@@ -112,7 +112,7 @@ Although Algorithm \ref{vflalgo} only sent secure intermediate data instead of s
   \item one normalizer layer;
   \item two fully connected L2 regularized dense layers with dropout activated by \texttt{elu};
   \item one more dense layer of unit $2$ to convert output into logits;
-  \item one \texttt{Softmax} layer to output probability distributions).
+  \item one \texttt{Softmax} layer to output probability distributions.
 \end{itemize}
 This neural network model is choosed because it leads to acceptable results with a conventional approach on the combined dataset, denoted by \texttt{combinedNN}, which is the baseline method to benchmark the performance of \texttt{vFedCCE}.
 
