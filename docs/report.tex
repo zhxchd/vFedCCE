@@ -9,7 +9,7 @@
 \date{}
 \begin{document}
 \maketitle
-\section{The proposed \texttt{vFedCCE} algorithm}\label{vfedcce}
+\section{The proposed \texttt{vFedCCE} algorithm}\label{secvfedcce}
   To apply the general vertical federated learning architecture to the setting of classification problem, we studied the categorical cross entropy loss function to deploy the gradient-based optimizer on the clients, instead of the centralized server, in order to preserve privacy. Following this method, we proposed the following algorithm of vertical federated learning with categorical cross entropy loss (\texttt{vFedCCE}). To simplify, we assume that the two clients have already aligned their datasets and train on a shared ID space $I$, which is the result after the preprocessing of private entity resolution.
 
   Before presenting the algorithm, we need to clarify some of the notations that will be used later in this section. For an $m\times n$ matrix $x$, $x_i$ is its $i$-th row vector and $x_{ij}$ is its entry at $i$-th row and $j$-th column, which means that $x_i=\langle x_{i1},x_{i2},\ldots,x_{in}\rangle$. For real matrices $x,y$ of the same shape, $x\oslash y$ is the Hadamard division (element-wise division) of $x$ and $y$, that is, $(x\oslash y)_{ij}={x_{ij}}/{y_{ij}}$; $\langle x,y\rangle_\mathrm{F}$ is the Frobenius inner product (element-wise dot product) of $x$ and $y$, that is $\langle x,y\rangle_\mathrm{F}=\sum_{i,j}x_{ij}y_{ij}$. With these notations, the algorithm \texttt{vFedCCE} is as follows:
@@ -79,7 +79,7 @@ Similarly, for client 2,
 
 Note that for privacy reasons, the labels $y$ stored on client 2 are not allowed to leave client 2. Therefore, we cannot directly send $y$ to client 1 in order to complete the calculations from (\ref{client1}) entirely locally on client 1. However, it is possible to send example-wise partial gradients $\frac{\partial a_{ij}}{\partial w_1}$ to client 2 to assemble into the total gradient $\frac{\partial\mathcal{L}}{\partial w_1}$ with the assistance of $y$ and $p$, which is what the function \texttt{AssembleGradient()} does in Algorithm \ref{vflalgo}.
 
-As for client 2, since the labels $y$ are originally stored there and client 1's model output $a$ is safe to send, it can complete the calculations from (\ref{client2}) entirely locally. If we denote the element wise division $y\oslash p$ as a constant matrix $c$, client 2's gradiant can be calculated as follows:
+As for client 2, since the labels $y$ are originally stored there and client 1's model output $a$ is safe to send, it can complete the calculations from (\ref{client2}) entirely locally. If we denote the element wise division $y\oslash p$ as a constant matrix $c$, client 2's gradient can be calculated as follows:
 
 \begin{align*}
   \frac{\partial\mathcal{L}}{\partial w_2}&=-\frac{1}{N}\sum_{i=1}^N \sum_{j=1}^m\frac{y_{ij}}{p_{ij}}\frac{\partial b_{ij}}{\partial w_2}=-\frac{1}{N}\sum_{i=1}^N \sum_{j=1}^m c_{ij}\frac{\partial b_{ij}}{\partial w_2}\\
@@ -94,16 +94,16 @@ Therefore, the gradients calculated locally on the clients in Algorithm \ref{vfl
 
 Except preserving privacy, one major advantage of vertical federated learning is to reduce communication cost by avoiding sending huge datasets from the clients to the server to combine and then apply conventional deep learning over it. Although compared with the VFL example from \cite{yang2019federated} which only sends local gradients $\frac{\partial L}{\partial w}$ (it is possible because they are dealing with a linear regression model and an $L^2$ regularized MSE loss function), much more amount of intermediate data is being sent in Algorithm \ref{vflalgo} when sending $\frac{\partial a_{ij}}{\partial w_1}$, we expect the communication cost will still be reduced when the dataset is too huge to efficiently send and combine on the server. This is because on each batch, \texttt{vFedCCE} sends $Nm$ different partial gradients $\frac{\partial a_{ij}}{\partial w_1}$, whose amount of data is independent of the number of features in the datasets.
 
-One potential issue with Algorithm \ref{vflalgo} is that, when assembling client 1's gradient from all the partial gradients $\frac{\partial a_{ij}}{\partial w_1}$, a lot of floating point arthmetic calculation is being carried out and mannually summed up, which may lead to a presicion problem compared with a conventional approach. This concern has been dismissed by the experimental results shown later in section \ref{vflexp}.
+One potential issue with Algorithm \ref{vflalgo} is that, when assembling client 1's gradient from all the partial gradients $\frac{\partial a_{ij}}{\partial w_1}$, a lot of floating point arithmetic calculation is being carried out and manually summed up, which may lead to a precision problem compared with a conventional approach. This concern has been dismissed by the experimental results shown later in section \ref{vflexp}.
 
-\paragraph{Privacy.} To analyse whether Algorithm \ref{vflalgo} preserves privacy, we need to evaluate the data being sent across the clients, which, rdeferring to Figure \ref{vflseqdia}, is:
+\paragraph{Privacy.} To analyze whether Algorithm \ref{vflalgo} preserves privacy, we need to evaluate the data being sent across the clients, which, referring to Figure \ref{vflseqdia}, is:
 \begin{itemize}
   \item Client 1's model output $a=\begin{bmatrix} w_1x_1^1& w_1x_2^1& \ldots &w_1x_N^1 \end{bmatrix}^T$. This data is safe and necessary to send as the shared model needs to average the two outputs for predictions.
   \item Client 1's partial gradients $\frac{\partial a_{ij}}{\partial w_1}$. This is safe to send as client 2 cannot restore the $x$ values from partial derivatives $\frac{\partial a_{ij}}{\partial w_1}$. Also, gradients are being sent in other literature such as \cite{yang2019federated} and \cite{hardy2017private}.
   \item Client 1's total gradient, sent from client 2 to client 1. This is also safe and necessary to sent as this is the gradient client 1 needs to update its own weight vectors.
 \end{itemize}
 
-Although Algorithm \ref{vflalgo} only sent secure intermediate data instead of sensitive raw data, it is still important to discuss the feasibility of applying some encryption scheme on top of \texttt{vFedCCE}. In our case, since all the intermediate data (i.e. $a$ and $\frac{\partial a_{ij}}{w_1}$) is sent for linear operations, it is possible to apply addictively homomorphic encryption on those data, such that client 2 receives encrypted values, applies linear operations on the encrypted values and returns the encrypted assembled gradient to client 1, without even knowing the decrypted values of the data it is being sent. More details on encryption will be discussed later.
+Although Algorithm \ref{vflalgo} only sent secure intermediate data instead of sensitive raw data, it is still important to discuss the feasibility of applying some encryption scheme on top of \texttt{vFedCCE}. In our case, since all the intermediate data (i.e. $a$ and $\frac{\partial a_{ij}}{w_1}$) is sent for linear operations, it is possible to apply additively homomorphic encryption on those data, such that client 2 receives encrypted values, applies linear operations on the encrypted values and returns the encrypted assembled gradient to client 1, without even knowing the decrypted values of the data it is being sent. More details on encryption will be discussed later.
 
 \section{Implementation and experimental results}\label{vflexp}
 \paragraph{Implementation details.} The proposed \texttt{vFedCCE} algorithm is implemented in Python with the TensorFlow Keras library on the vertically partitioned SGCP dataset from \cite{groemping2019south}. In the experiments, the local models on client 1 and client 2 are the same neural network model:
@@ -114,13 +114,13 @@ Although Algorithm \ref{vflalgo} only sent secure intermediate data instead of s
   \item one more dense layer of unit $2$ to convert output into logits;
   \item one \texttt{Softmax} layer to output probability distributions.
 \end{itemize}
-This neural network model is choosed because it leads to acceptable results with a conventional approach on the combined dataset, denoted by \texttt{combinedNN}, which is the baseline method to benchmark the performance of \texttt{vFedCCE}.
+This neural network model is chosen because it leads to acceptable results with a conventional approach on the combined dataset, denoted by \texttt{combinedNN}, which is the baseline method to benchmark the performance of \texttt{vFedCCE}.
 
 For hyperparameters, no deliberate tuning is being applied since the goal of experiments is to verify that the learning outcome of \texttt{combinedNN} and \texttt{vFedCCE} are similar, instead of to achieve perfect performance. Both methods are implemented with the same hyperparameters: the learning rate (of Adam optimizer) $\eta=0.001$, the number of epochs $E=50$ and the batch size $N=32$.
 
-\paragraph{Experimental results.} Figure \ref{fig:vflexp} demonstrates the training loss and accuracy of \texttt{combinedNN} and \texttt{vFedCCE} under the implementation specified previously. It shows that the two methods are able to minimize loss and increase accuracy over epochs, with similar speed. Table \ref{vfltest} presents the learning outcome of the two methods, which, expected, shows both similar and acceptable accuracy, precision, recall, F-score and AUC values. This also dismisses the concern on floating-point precision raised in section \ref{vfedcce}.
+\paragraph{Experimental results.} Figure \ref{fig:vflexp} demonstrates the training loss and accuracy of \texttt{combinedNN} and \texttt{vFedCCE} under the implementation specified previously. It shows that the two methods are able to minimize loss and increase accuracy over epochs, with similar speed. Table \ref{vfltest} presents the learning outcome of the two methods, which, expectedly, shows both similar and acceptable accuracy, precision, recall, F-score and AUC values. This also dismisses the concern on floating-point precision raised in section \ref{secvfedcce}.
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \centering
 \begin{subfigure}{.5\textwidth}
   \centering
@@ -138,7 +138,7 @@ For hyperparameters, no deliberate tuning is being applied since the goal of exp
 \label{fig:vflexp}
 \end{figure}
 
-\begin{table}[h]
+\begin{table}[ht]
 \centering
   \resizebox{0.7\textwidth}{!}{%
   \begin{tabular}{|c|c|c|c|c|c|}
