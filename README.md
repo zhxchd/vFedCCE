@@ -1,9 +1,13 @@
 # `vFedCCE`
 A vertical federated learning algorithm for classﬁcation problems with gradient-based optimization.
 
+## Data set structure
+
 This algorithm is going to train a shared model on the common IDs (aligned by some private entity resolution technique) between vertically partitioned datasets, as shown in the following figure.
 
 <img src="./docs/images/vertical_data.png" style="zoom: 50%;" />
+
+## The Proposed `vFedCCE` Algorithm
 
 The algorithm itself can be described by the following sequence diagram.
 
@@ -12,3 +16,20 @@ The algorithm itself can be described by the following sequence diagram.
 Details of the algorithm can be found in the [report](./docs/report.pdf).
 
 Details of the implementation (with TensorFlow and Keras) can be found under the directory [src](./src/).
+
+## Update
+
+> This algorithm might be a duplicate of some previous research work that I was not aware of when proposing.
+
+It just came into my attention that my result seems to be a special case of [[1\]](#_ftn1), with the following differences:
+
+- `vFedCCE` encrypts the intermediate data under homomorphic encryption with the help of  [[2\]](#_ftn2).
+- I directly studied the loss function of categorical cross entropy loss while [[1\]](#_ftn1) studied a general loss function.
+- I studied the case of averaging local predictions as the final prediction, while [[1\]](#_ftn1) claimed that a similar process should work for any differentiable function to construct the final prediction.
+- `vFedCCE` is applicable for any gradient-based optimization methods while [[1\]](#_ftn1) particularly studied asynchronous SGD.
+
+---
+
+[[1\]](#_ftnref1) Hu, Y., Niu, D., Yang, J., & Zhou, S. (2019, July). FDML: A  collaborative machine learning framework for distributed features. In *Proceedings of the 25th ACM SIGKDD International Conference on Knowledge Discovery & Data Mining* (pp. 2232-2240).
+
+[[2\]](#_ftnref2) CSIRO's Data61.  (2013). Python Paillier Library. https://github.com/data61/python-paillier. 
