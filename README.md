@@ -17,7 +17,7 @@ Details of the algorithm can be found in the [report](./docs/report.pdf).
 
 Details of the implementation (with TensorFlow and Keras) can be found under the directory [src](./src/).
 
-## Update
+<!-- ## Update
 
 > This algorithm might be a duplicate of some previous research work that I was not aware of when proposing.
 
@@ -30,6 +30,6 @@ It just came into my attention that my result seems to be a special case of [[1\
 
 ---
 
-[[1\]](#_ftnref1) Hu, Y., Niu, D., Yang, J., & Zhou, S. (2019, July). FDML: A  collaborative machine learning framework for distributed features. In *Proceedings of the 25th ACM SIGKDD International Conference on Knowledge Discovery & Data Mining* (pp. 2232-2240).
+[[1\]](#_ftnref1) Hu, Y., Niu, D., Yang, J., & Zhou, S. (2019, July). FDML: A  collaborative machine learning framework for distributed features. In *Proceedings of the 25th ACM SIGKDD International Conference on Knowledge Discovery & Data Mining* (pp. 2232-2240). -->
 
-[[2\]](#_ftnref2) CSIRO's Data61.  (2013). Python Paillier Library. https://github.com/data61/python-paillier. 
+<!-- [[1\]](#_ftnref2) CSIRO's Data61.  (2013). Python Paillier Library. https://github.com/data61/python-paillier.  -->
